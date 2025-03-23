@@ -18,6 +18,8 @@ builder.Services.AddDbContext<ApplicationDbContext>(options =>
     options.UseSqlServer(builder.Configuration.GetConnectionString("NZWalksConnectionStrings"));
 });
 builder.Services.AddScoped<IRegionRepository, RegionRepository>();
+builder.Services.AddScoped<IWalkRepository, WalkRepository>();
+builder.Services.AddScoped<IDifficultyRepository, DifficultyRepository>();
 
 builder.Services.AddAutoMapper(typeof(AutoMapperProfiles));
 var app = builder.Build();
