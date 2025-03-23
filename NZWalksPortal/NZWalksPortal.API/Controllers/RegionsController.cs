@@ -43,5 +43,23 @@ namespace NZWalksPortal.API.Controllers
                 return NotFound();
             return Ok(mapper.Map<RegionDto>(regionDomain));
         }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteRegion([FromRoute] Guid id)
+        {
+            var regionDomain = await regionRepository.DeleteRegionAsync(id);
+            if (regionDomain is null)
+                return NotFound();
+            return Ok(mapper.Map<RegionDto>(regionDomain));
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateRegion([FromRoute] Guid id, [FromBody] UpdateRegionRequestDto request)
+        {
+            var regionDomain = mapper.Map<Region>(request);
+            regionDomain.Id = id;
+            var updatedRegion = await regionRepository.UpdateRegionAsync(regionDomain);
+            if (updatedRegion is null)
+                return NotFound();
+            return Ok(mapper.Map<RegionDto>(updatedRegion));
+        }
     }
 }
