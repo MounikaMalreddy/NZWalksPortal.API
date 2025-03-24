@@ -7,5 +7,6 @@ namespace NZWalksPortal.API.Repositories.Interface
         Task<Walk> AddWalkAsync(Walk walk);
         Task<IEnumerable<Walk>> GetAllWalksAsync();
         Task<Walk?> GetWalkByIdAsync(Guid id);
+        Task<Walk?> DeleteWalkByIdAsync(Guid id);
     }
 }

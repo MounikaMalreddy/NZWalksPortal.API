@@ -1,6 +1,7 @@
 using Microsoft.EntityFrameworkCore;
 using NZWalksPortal.API.Data;
 using NZWalksPortal.API.Mappings;
+using NZWalksPortal.API.Middleware;
 using NZWalksPortal.API.Repositories.Implementation;
 using NZWalksPortal.API.Repositories.Interface;
 
@@ -31,6 +32,8 @@ if (app.Environment.IsDevelopment())
     app.UseSwaggerUI();
 }
 
+//configure exception middleware
+app.UseMiddleware(typeof(GlobalErrorHandlingMiddleware));
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

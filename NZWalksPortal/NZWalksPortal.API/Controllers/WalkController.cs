@@ -33,12 +33,14 @@ namespace NZWalksPortal.API.Controllers
             if(walkDomain.RegionId != Guid.Empty)
             {
                 var existingRegion = await regionRepository.GetRegionByIdAsync(walkDomain.RegionId);
-                walkDomain.Region = existingRegion;
+                if (existingRegion is not null)
+                    walkDomain.Region = existingRegion;
             }
             if (walkDomain.DifficultyId != Guid.Empty)
             {
                 var existingDifficulty = await difficultyRepository.GetDifficultyByIdAsync(walkDomain.DifficultyId);
-                walkDomain.Difficulty = existingDifficulty;
+                if (existingDifficulty is not null)
+                    walkDomain.Difficulty = existingDifficulty;
             }
                 var responseDto = mapper.Map<WalkDto>(walkDomain);
             return CreatedAtAction(nameof(GetWalkById), new { id = responseDto.Id }, responseDto);
@@ -54,12 +56,14 @@ namespace NZWalksPortal.API.Controllers
                 if (walk.RegionId != Guid.Empty)
                 {
                     var existingRegion = await regionRepository.GetRegionByIdAsync(walk.RegionId);
-                    walk.Region = existingRegion;
+                    if (existingRegion is not null)
+                        walk.Region = existingRegion;
                 }
                 if (walk.DifficultyId != Guid.Empty)
                 {
                     var existingDifficulty = await difficultyRepository.GetDifficultyByIdAsync(walk.DifficultyId);
-                    walk.Difficulty = existingDifficulty;
+                    if (existingDifficulty is not null)
+                        walk.Difficulty = existingDifficulty;
                 }
             }
             return Ok(mapper.Map<IEnumerable<WalkDto>>(walkDomain));
@@ -73,12 +77,34 @@ namespace NZWalksPortal.API.Controllers
             if (walkDomain.RegionId != Guid.Empty)
             {
                 var existingRegion = await regionRepository.GetRegionByIdAsync(walkDomain.RegionId);
-                walkDomain.Region = existingRegion;
+                if (existingRegion is not null)
+                    walkDomain.Region = existingRegion;
             }
             if (walkDomain.DifficultyId != Guid.Empty)
             {
                 var existingDifficulty = await difficultyRepository.GetDifficultyByIdAsync(walkDomain.DifficultyId);
-                walkDomain.Difficulty = existingDifficulty;
+                if (existingDifficulty is not null)
+                    walkDomain.Difficulty = existingDifficulty;
+            }
+            return Ok(mapper.Map<WalkDto>(walkDomain));
+        }
+        [HttpDelete("{id}")]
+        public async Task<IActionResult> DeleteWalkById([FromRoute] Guid id)
+        {
+            var walkDomain = await walkRepository.DeleteWalkByIdAsync(id);
+            if (walkDomain is null)
+                return NotFound();
+            if (walkDomain.RegionId != Guid.Empty)
+            {
+                var existingRegion = await regionRepository.GetRegionByIdAsync(walkDomain.RegionId);
+                if(existingRegion is not null)
+                    walkDomain.Region = existingRegion;
+            }
+            if (walkDomain.DifficultyId != Guid.Empty)
+            {
+                var existingDifficulty = await difficultyRepository.GetDifficultyByIdAsync(walkDomain.DifficultyId);
+                if(existingDifficulty is not null)
+                    walkDomain.Difficulty = existingDifficulty;
             }
             return Ok(mapper.Map<WalkDto>(walkDomain));
         }
