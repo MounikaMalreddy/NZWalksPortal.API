@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.IdentityModel.Tokens;
+using NZWalksPortal.API.CustomActionFilter;
 using NZWalksPortal.API.Models.Domain;
 using NZWalksPortal.API.Models.DTO;
 using NZWalksPortal.API.Repositories.Interface;
@@ -26,6 +27,7 @@ namespace NZWalksPortal.API.Controllers
             this.mapper = mapper;
         }
         [HttpPost]
+        [ValidateModel]
         public async Task<IActionResult> CreateWalk([FromBody] AddWalkRequestDto request)
         {
             var walkDomain = mapper.Map<Walk>(request);
