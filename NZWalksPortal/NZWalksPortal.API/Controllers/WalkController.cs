@@ -110,5 +110,27 @@ namespace NZWalksPortal.API.Controllers
             }
             return Ok(mapper.Map<WalkDto>(walkDomain));
         }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> UpdateWalk([FromRoute] Guid id, [FromBody] UpdateWalkRequestDto request)
+        {
+            var walkDomain = await walkRepository.GetWalkByIdAsync(id);
+            if (walkDomain is null)
+                return NotFound();
+            walkDomain = mapper.Map(request, walkDomain);
+            walkDomain = await walkRepository.UpdateWalkAsync(walkDomain);
+            if (walkDomain.RegionId != Guid.Empty)
+            {
+                var existingRegion = await regionRepository.GetRegionByIdAsync(walkDomain.RegionId);
+                if (existingRegion is not null)
+                    walkDomain.Region = existingRegion;
+            }
+            if (walkDomain.DifficultyId != Guid.Empty)
+            {
+                var existingDifficulty = await difficultyRepository.GetDifficultyByIdAsync(walkDomain.DifficultyId);
+                if (existingDifficulty is not null)
+                    walkDomain.Difficulty = existingDifficulty;
+            }
+            return Ok(mapper.Map<WalkDto>(walkDomain));
+        }
     }
 }
