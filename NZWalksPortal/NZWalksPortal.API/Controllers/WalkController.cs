@@ -48,9 +48,10 @@ namespace NZWalksPortal.API.Controllers
             return CreatedAtAction(nameof(GetWalkById), new { id = responseDto.Id }, responseDto);
         }
         [HttpGet]
-        public async Task<IActionResult> GetAllWalks()
+        public async Task<IActionResult> GetAllWalks([FromQuery]string? filterQuery, [FromQuery]string? sortBy,
+            [FromQuery]string? sortDirection,int? pageNumber, int? pageSize)
         {
-            var walkDomain = await walkRepository.GetAllWalksAsync();
+            var walkDomain = await walkRepository.GetAllWalksAsync(filterQuery,sortBy,sortDirection,pageNumber,pageSize);
             if (walkDomain is null)
                 return NotFound();
             foreach (var walk in walkDomain)
