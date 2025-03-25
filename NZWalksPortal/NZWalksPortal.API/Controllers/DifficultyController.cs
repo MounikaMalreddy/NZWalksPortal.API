@@ -15,7 +15,7 @@ namespace NZWalksPortal.API.Controllers
             this.difficultyRepository = difficultyRepository;
         }
 
-        [HttpGet("{id}")]
+        [HttpGet("{id}/GetDifficultyById")]
         public async Task<IActionResult> GetDifficultyById([FromRoute] Guid id)
         {
             var difficultyDomain = await difficultyRepository.GetDifficultyByIdAsync(id);

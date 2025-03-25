@@ -5,10 +5,18 @@ using NZWalksPortal.API.Mappings;
 using NZWalksPortal.API.Middleware;
 using NZWalksPortal.API.Repositories.Implementation;
 using NZWalksPortal.API.Repositories.Interface;
+using Serilog;
 
 var builder = WebApplication.CreateBuilder(args);
 
 // Add services to the container.
+var logger = new LoggerConfiguration()
+    //.WriteTo.Console()
+    .WriteTo.File("Logs/NZWalks.txt",rollingInterval:RollingInterval.Day)
+    .MinimumLevel.Information()
+    .CreateLogger();
+builder.Logging.ClearProviders();
+builder.Services.AddSerilog(logger);
 
 builder.Services.AddControllers();
 builder.Services.AddHttpContextAccessor();

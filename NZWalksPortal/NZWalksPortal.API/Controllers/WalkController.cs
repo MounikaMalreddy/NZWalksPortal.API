@@ -26,7 +26,7 @@ namespace NZWalksPortal.API.Controllers
             this.difficultyRepository = difficultyRepository;
             this.mapper = mapper;
         }
-        [HttpPost]
+        [HttpPost("CreateWalk")]
         [ValidateModel]
         public async Task<IActionResult> CreateWalk([FromBody] AddWalkRequestDto request)
         {
@@ -47,7 +47,7 @@ namespace NZWalksPortal.API.Controllers
                 var responseDto = mapper.Map<WalkDto>(walkDomain);
             return CreatedAtAction(nameof(GetWalkById), new { id = responseDto.Id }, responseDto);
         }
-        [HttpGet]
+        [HttpGet("GetAllWalks")]
         public async Task<IActionResult> GetAllWalks([FromQuery]string? filterQuery, [FromQuery]string? sortBy,
             [FromQuery]string? sortDirection,int? pageNumber, int? pageSize)
         {
@@ -71,7 +71,7 @@ namespace NZWalksPortal.API.Controllers
             }
             return Ok(mapper.Map<IEnumerable<WalkDto>>(walkDomain));
         }
-        [HttpGet("{id}")]
+        [HttpGet("{id}/GetWalkById")]
         public async Task<IActionResult> GetWalkById([FromRoute] Guid id)
         {
             var walkDomain = await walkRepository.GetWalkByIdAsync(id);
@@ -91,7 +91,7 @@ namespace NZWalksPortal.API.Controllers
             }
             return Ok(mapper.Map<WalkDto>(walkDomain));
         }
-        [HttpDelete("{id}")]
+        [HttpDelete("{id}/DeleteWalkById")]
         public async Task<IActionResult> DeleteWalkById([FromRoute] Guid id)
         {
             var walkDomain = await walkRepository.DeleteWalkByIdAsync(id);
@@ -111,7 +111,7 @@ namespace NZWalksPortal.API.Controllers
             }
             return Ok(mapper.Map<WalkDto>(walkDomain));
         }
-        [HttpPut("{id}")]
+        [HttpPut("{id}/UpdateWalk")]
         public async Task<IActionResult> UpdateWalk([FromRoute] Guid id, [FromBody] UpdateWalkRequestDto request)
         {
             var walkDomain = await walkRepository.GetWalkByIdAsync(id);
