@@ -10,10 +10,12 @@ namespace NZWalksPortal.API.Middleware
     public class GlobalErrorHandlingMiddleware
     {
         private readonly RequestDelegate next;
+        private readonly ILogger<GlobalErrorHandlingMiddleware> logger;
 
-        public GlobalErrorHandlingMiddleware(RequestDelegate next)
+        public GlobalErrorHandlingMiddleware(RequestDelegate next,ILogger<GlobalErrorHandlingMiddleware> logger)
         {
             this.next = next;
+            this.logger = logger;
         }
         public  async Task InvokeAsync(HttpContext context)
         {
@@ -26,7 +28,7 @@ namespace NZWalksPortal.API.Middleware
                 await HandleExceptionAsync(context, ex);
             }
         }
-        private static Task HandleExceptionAsync(HttpContext context, Exception exception)
+        private Task HandleExceptionAsync(HttpContext context, Exception exception)
         {
             HttpStatusCode status;
             var stackTrace = string.Empty;
@@ -76,6 +78,7 @@ namespace NZWalksPortal.API.Middleware
             });
             context.Response.ContentType = "application/json";
             context.Response.StatusCode = (int)status;
+            logger.LogError(exception, exception.Message);
             return context.Response.WriteAsync(exceptionResult);
         }
     }
